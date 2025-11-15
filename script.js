@@ -76,7 +76,7 @@ function draw(map) {
   [127, 127, 127], , , ,//grey -> wall
   [255, 0, 0]//red -> fire
  ]
- c.width = c.height = kante * pixSize
+ c.width = c.height = Math.max(kante, 1) * pixSize
  let newC = new OffscreenCanvas(c.width, c.height)
  let newCtx = newC.getContext("2d")
  let dark = window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -227,4 +227,5 @@ function main(playerPos, walls, doorPos, fires) {
    clearInterval(intervalID)
   }
  }, 100)
+
 }
