@@ -77,7 +77,7 @@ function draw(map) {
   [255, 0, 0]//red -> fire
  ]
  c.width = c.height = Math.max(kante, 1) * pixSize
- let newC = typeof OffscreenCanvas !== "undefined"? new OffscreenCanvas(c.width, c.height) : document.createElement("canvas")
+ let newC = typeof OffscreenCanvas !== "undefined" ? new OffscreenCanvas(c.width, c.height) : document.createElement("canvas")
  newC.width = c.width
  newC.height = c.height
  let newCtx = newC.getContext("2d")
@@ -115,7 +115,7 @@ function getDis(map) {
     let newPos = posRich(changed[i], j)
     let possible = 1
     for (let l = 0; l < check[j].length; l++) {
-     possible &= !(map[posRich(changed[i], check[j][l])] & 4)
+     possible &= !(map[posRich(changed[i], check[j][l])] & 12)
     }
     if (!done[newPos] && possible) {
      done[newPos] = 1
@@ -154,11 +154,16 @@ function main(playerPos, walls, doorPos, fires) {
  for (let i = 0; i < fires.length; i++) {
   map[fires[i] = cord(...fires[i])] |= 8
  }
- let disMap = getDis(map)
  running = 1
  document.getElementById("result").textContent = vis(map)
  draw(map)
+ let disMap = getDis(map)
+ let fireChange = 0
  intervalID = setInterval(() => {
+  if(fireChange){
+   disMap = getDis(map)
+   fireChange = 0
+  }
   let nextFires = []
   for (let i = 0; i < fires.length; i++) {
    let newFire = []
@@ -177,6 +182,7 @@ function main(playerPos, walls, doorPos, fires) {
     }
     map[spawnFire] = 8
     nextFires.push(spawnFire)
+    fireChange = 1
    }
    if (newFire.length) {
     nextFires.push(fires[i])
@@ -229,6 +235,4 @@ function main(playerPos, walls, doorPos, fires) {
    clearInterval(intervalID)
   }
  }, 100)
-
 }
-
