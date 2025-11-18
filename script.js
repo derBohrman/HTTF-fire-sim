@@ -77,7 +77,9 @@ function draw(map) {
   [255, 0, 0]//red -> fire
  ]
  c.width = c.height = Math.max(kante, 1) * pixSize
- let newC = new OffscreenCanvas(c.width, c.height)
+ let newC = typeof OffscreenCanvas !== "undefined"? new OffscreenCanvas(c.width, c.height) : document.createElement("canvas")
+ newC.width = c.width
+ newC.height = c.height
  let newCtx = newC.getContext("2d")
  let dark = window.matchMedia("(prefers-color-scheme: dark)").matches
  newCtx.fillStyle = dark ? "black" : "white"
@@ -229,3 +231,4 @@ function main(playerPos, walls, doorPos, fires) {
  }, 100)
 
 }
+
